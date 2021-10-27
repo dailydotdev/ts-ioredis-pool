@@ -14,7 +14,8 @@ Basic usage:
 
 ```typescript
 // In some file (e.g. src/pool.ts)
-const ioRedisPoolOpts = IORedisPoolOptions.fromUrl(process.env.REDIS_URL as string)
+const ioRedisPoolOpts = IORedisPoolOptions
+  .fromUrl(process.env.REDIS_URL as string)
   // This accepts the RedisOptions class from ioredis as an argument
   // https://github.com/luin/ioredis/blob/master/lib/redis/RedisOptions.ts
   .withIORedisOptions({
@@ -50,10 +51,11 @@ You can also connect via host and port:
 
 ```typescript
 // In some file (e.g. src/pool.ts)
-const ioRedisPoolOpts = IORedisPoolOptions.fromHostAndPort(
-  process.env.REDIS_HOST as string,
-  parseInt(process.env.REDIS_PORT as string)
-)
+const ioRedisPoolOpts = IORedisPoolOptions
+  .fromHostAndPort(
+    process.env.REDIS_HOST as string,
+    parseInt(process.env.REDIS_PORT as string)
+  )
   .withIORedisOptions({
     name: 'test',
     keyPrefix: 'ioredis_test_',
@@ -67,7 +69,7 @@ const ioRedisPoolOpts = IORedisPoolOptions.fromHostAndPort(
 export const ioRedisPool = new IORedisPool(ioRedisPoolOpts)
 ```
 
-A more anonymous way of executing redis commands. This allows you access to the ioredis commands while also managing the acquisition and release of the connections from the pool for you so you don't have to worry about it.
+A more anonymous way of executing redis commands. This allows you access to the ioredis client methods while also managing the acquisition and release of the connections from the pool for you so you don't have to worry about it.
 
 ```typescript
 // assuming you already have an IORedisPool instance
@@ -76,9 +78,13 @@ const someValue = await ioRedisPool.execute(async (client) => {
   return await client.get('some-key')
 })
 
-// Set some value
+// You can run multiple commands
 await ioRedisPool.execute(async (client) => {
   // Here you have access to ioredis commands
-  await client.set('some-key', 'some-value')
+  const set = client.set('some-key', 'some-value')
+  const del = client.del('some-other-key')
+
+  await Promise.all([set, del])
+  return await client.del('another-key')
 })
 ```
