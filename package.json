@@ -1,12 +1,18 @@
 {
   "name": "ioredis-pool",
-  "author": "StephenMP",
+  "author": {
+    "name": "StephenMP",
+    "url": "https://stephenmp.github.io/"
+  },
   "description": "An ioredis connection pooling client written in TypeScript",
   "version": "1.0.0",
   "main": "dist/index.js",
   "module": "dist/index.es5.js",
   "typings": "dist/types/index.d.ts",
   "license": "MIT",
+  "private": false,
+  "bugs": "https://github.com/StephenMP/ioredis-pool/issues",
+  "homepage": "https://github.com/StephenMP/ioredis-pool",
   "repository": {
     "type": "git",
     "url": "https://github.com/StephenMP/ioredis-pool"

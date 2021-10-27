@@ -17,7 +17,6 @@ jobs:
         with:
           node-version: 14
           registry-url: 'https://registry.npmjs.org'
-          always-auth: true
 
       # Read caches
       - name: Read Yarn/Node Cache
@@ -38,7 +37,7 @@ jobs:
             **/dist
 
       - name: Publish
+        working-directory: npm
         env:
-          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: yarn publish --access public . || echo 'Version already exists'
