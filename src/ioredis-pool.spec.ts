@@ -85,14 +85,17 @@ describe('test ioredis-pool from url', () => {
         .withIORedisOptions({
           name: 'test',
           keyPrefix: 'ioredis_test_',
-          tls: {
-            rejectUnauthorized: false,
-          },
         })
         .withPoolOptions({
           min: 2,
           max: 20,
         })
+
+      if (process.env.REDIS_TLS === 'true') {
+        opts.redisOptions.tls = {
+          rejectUnauthorized: false,
+        }
+      }
 
       pool = new IORedisPool(opts)
     })
