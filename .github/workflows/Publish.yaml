@@ -41,5 +41,6 @@ jobs:
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
+          yarn link
           yarn build
           yarn publish --access public ./dist || echo 'Version already exists'
