@@ -118,5 +118,6 @@ jobs:
       - name: Publish Packages
         uses: benc-uk/workflow-dispatch@v1
         with:
+          ref: refs/heads/release
           workflow: Publish Package
           token: ${{ secrets.GH_BOT_TOKEN }}
