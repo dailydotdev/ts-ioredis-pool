@@ -2,7 +2,11 @@
 
 [![CI](https://github.com/StephenMP/ioredis-pool/actions/workflows/CI.yaml/badge.svg?branch=main&event=push)](https://github.com/StephenMP/ioredis-pool/actions/workflows/CI.yaml)
 
-Connection pooling for ioredis in TypeScript
+Connection pooling for ioredis in TypeScript.
+
+Supports
+- Node 10+
+- Redis 4+
 
 ## Usage
 
