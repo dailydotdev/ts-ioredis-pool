@@ -118,4 +118,11 @@ export class IORedisPool extends EventEmitter {
     this.emit('end')
     return res
   }
+
+  async execute<T>(fn: (client: IRedis) => Promise<T>, priority?: number) {
+      const client = await this.pool.acquire(priority)
+      const result = await fn(client)
+      await this.release(client)
+      return result
+  }
 }
