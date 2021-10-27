@@ -1,6 +1,6 @@
-# ioredis-pool
+# ts-ioredis-pool
 
-[![CI](https://github.com/StephenMP/ioredis-pool/actions/workflows/CI.yaml/badge.svg?branch=main&event=push)](https://github.com/StephenMP/ioredis-pool/actions/workflows/CI.yaml)
+[![CI](https://github.com/StephenMP/ts-ioredis-pool/actions/workflows/CI.yaml/badge.svg?branch=main&event=push)](https://github.com/StephenMP/ts-ioredis-pool/actions/workflows/CI.yaml)
 
 Connection pooling for ioredis in TypeScript.
 

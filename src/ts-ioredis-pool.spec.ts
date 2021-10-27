@@ -1,5 +1,5 @@
 import { IORedisPool } from './index'
-import { IORedisPoolOptions } from './ioredis-pool'
+import { IORedisPoolOptions } from './ts-ioredis-pool'
 import { Redis as IRedis } from 'ioredis'
 
 global.fail = (error?: any): never => {
@@ -59,7 +59,7 @@ const testSet = (client: IRedis | undefined, pool: IORedisPool | undefined) => {
   })
 }
 
-describe('test ioredis-pool from host and port', () => {
+describe('test ts-ioredis-pool from host and port', () => {
   if (!process.env.REDIS_HOST || !process.env.REDIS_PORT) {
     fail('REDIS_HOST or REDIS_PORT env var is not set!')
   } else {
@@ -96,7 +96,7 @@ describe('test ioredis-pool from host and port', () => {
   }
 })
 
-describe('test ioredis-pool from url', () => {
+describe('test ts-ioredis-pool from url', () => {
   if (!process.env.REDIS_URL) {
     fail('REDIS_URL env var is not set!')
   } else {

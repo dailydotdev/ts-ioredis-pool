@@ -1,5 +1,5 @@
 {
-  "name": "ioredis-pool",
+  "name": "ts-ioredis-pool",
   "author": {
     "name": "StephenMP",
     "url": "https://stephenmp.github.io/"
@@ -11,11 +11,11 @@
   "typings": "dist/types/index.d.ts",
   "license": "MIT",
   "private": false,
-  "bugs": "https://github.com/StephenMP/ioredis-pool/issues",
-  "homepage": "https://github.com/StephenMP/ioredis-pool",
+  "bugs": "https://github.com/StephenMP/ts-ioredis-pool/issues",
+  "homepage": "https://github.com/StephenMP/ts-ioredis-pool",
   "repository": {
     "type": "git",
-    "url": "https://github.com/StephenMP/ioredis-pool"
+    "url": "https://github.com/StephenMP/ts-ioredis-pool"
   },
   "keywords": [
     "redis",
@@ -24,8 +24,10 @@
     "ioredis-client",
     "redis-pool",
     "ioredis-pool",
+    "ts-ioredis-pool",
     "redis-connection-pool",
-    "ioredis-connection-pool"
+    "ioredis-connection-pool",
+    "st-ioredis-connection-pool"
   ],
   "files": [
     "dist"

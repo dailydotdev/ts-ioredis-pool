@@ -1,1 +1,1 @@
-export * from "./ioredis-pool";
+export * from "./ts-ioredis-pool";
