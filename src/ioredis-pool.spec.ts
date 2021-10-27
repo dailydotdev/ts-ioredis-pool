@@ -7,8 +7,8 @@ global.fail = (error?: any): never => {
 }
 
 describe('test ioredis-pool from host and port', () => {
-  if (!process.env.REDIS_HOST || !process.env.REDIS_PORT || !process.env.REDIS_PASS) {
-    fail('REDIS_HOST, REDIS_PORT, or REDIS_PASS env var is not set!')
+  if (!process.env.REDIS_HOST || !process.env.REDIS_PORT) {
+    fail('REDIS_HOST or REDIS_PORT env var is not set!')
   } else {
     let pool: IORedisPool
     let client: IRedis | undefined
@@ -20,14 +20,17 @@ describe('test ioredis-pool from host and port', () => {
           password: process.env.REDIS_PASS as string,
           name: 'test',
           keyPrefix: 'ioredis_test_',
-          tls: {
-            rejectUnauthorized: false,
-          },
         })
         .withPoolOptions({
           min: 2,
           max: 20,
         })
+
+      if (process.env.REDIS_TLS === 'true') {
+        opts.redisOptions.tls = {
+          rejectUnauthorized: false,
+        }
+      }
 
       pool = new IORedisPool(opts)
     })
