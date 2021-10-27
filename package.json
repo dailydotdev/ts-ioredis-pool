@@ -1,7 +1,7 @@
 {
   "name": "ioredis-pool",
   "author": "StephenMP",
-  "description": "An ioredis connection pooling client",
+  "description": "An ioredis connection pooling client written in TypeScript",
   "version": "1.0.0",
   "main": "dist/index.js",
   "module": "dist/index.es5.js",
@@ -24,7 +24,6 @@
   "files": [
     "dist"
   ],
-  "types": "dist/types/index.d.ts",
   "scripts": {
     "build": "rm -rf dist && tsc -p tsconfig.json && ncc build --quiet --minify",
     "test": "jest"

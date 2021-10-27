@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - release
   pull_request:
     branches:
       - '*'
@@ -107,3 +108,15 @@ jobs:
         run: |
           yarn link
           yarn test
+
+  publish-packages:
+    name: Publish Packages
+    runs-on: ubuntu-latest
+    needs: [build, test]
+    if: github.ref == 'refs/heads/release'
+    steps:
+      - name: Publish Packages
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: Publish Package
+          token: ${{ secrets.GH_BOT_TOKEN }}
