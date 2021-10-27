@@ -18,6 +18,11 @@ jobs:
           node-version: 14
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Set Outputs
+        id: set-outputs
+        run: |
+          echo "::set-output name=yarn_cache_dir::$(yarn cache dir)"
+
       # Read caches
       - name: Read Yarn/Node Cache
         uses: actions/cache@v2
@@ -28,16 +33,14 @@ jobs:
             ${{ needs.build.outputs.yarn-cache-dir }}
             **/node_modules
 
-      - name: Read Build Cache
-        id: read-build-cache
-        uses: actions/cache@v2
-        with:
-          key: ${{ runner.os }}-build-${{ github.sha }}
-          path: |
-            **/dist
+      - name: Install Dependencies
+        if: steps.read-yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
 
       - name: Publish
         working-directory: npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: yarn publish --access public ./dist || echo 'Version already exists'
+        run: |
+          yarn build
+          yarn publish --access public ./dist || echo 'Version already exists'
