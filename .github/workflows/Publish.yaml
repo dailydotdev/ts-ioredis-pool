@@ -18,29 +18,13 @@ jobs:
           node-version: 14
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Set Outputs
-        id: set-outputs
-        run: |
-          echo "::set-output name=yarn_cache_dir::$(yarn cache dir)"
-
-      # Read caches
-      - name: Read Yarn/Node Cache
-        uses: actions/cache@v2
-        id: read-yarn-cache
-        with:
-          key: ${{ runner.os }}-yarn-${{ hashFiles('./yarn.lock') }}
-          path: |
-            ${{ needs.build.outputs.yarn-cache-dir }}
-            **/node_modules
-
       - name: Install Dependencies
-        if: steps.read-yarn-cache.outputs.cache-hit != 'true'
         run: yarn install --frozen-lockfile
+
+      - name: Build
+        run: yarn build
 
       - name: Publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          yarn link
-          yarn build
-          yarn publish --access public ./dist || echo 'Version already exists'
+        run: yarn publish --access public ./dist || echo 'Version already exists'
