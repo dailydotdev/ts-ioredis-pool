@@ -64,7 +64,7 @@ jobs:
         node-version: [10.x, 12.x, 14.x]
         redis-version: [4, 5, 6]
     env:
-      REDIS_URL: redis://:testpassword@localhost:6380
+      REDIS_URL: redis://:testpassword@localhost:6379
       REDIS_HOST: localhost
       REDIS_PORT: 6379
       REDIS_PASS: testpassword
