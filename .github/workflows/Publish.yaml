@@ -38,7 +38,6 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Publish
-        working-directory: npm
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
