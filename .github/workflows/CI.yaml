@@ -1,0 +1,111 @@
+name: CI
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '*'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    outputs:
+      yarn-cache-dir: ${{ steps.set-outputs.outputs.yarn_cache_dir }}
+    steps:
+      # Checkout source files
+      - name: Checkout Source Files
+        uses: actions/checkout@v2
+
+      # Setup environment
+      - name: Setup Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14
+
+      - name: Set Outputs
+        id: set-outputs
+        run: |
+          echo "::set-output name=yarn_cache_dir::$(yarn cache dir)"
+
+      - name: Read Yarn/Node Cache
+        uses: actions/cache@v2
+        id: read-yarn-cache
+        with:
+          key: ${{ runner.os }}-yarn-${{ hashFiles('./yarn.lock') }}
+          path: |
+            ${{ steps.set-outputs.outputs.yarn-cache-dir }}
+            **/node_modules
+
+      - name: Read Build Cache
+        id: read-build-cache
+        uses: actions/cache@v2
+        with:
+          key: ${{ runner.os }}-build-${{ github.sha }}
+          path: |
+            **/dist
+
+      - name: Install Dependencies
+        if: steps.read-yarn-cache.outputs.cache-hit != 'true'
+        run: yarn install --frozen-lockfile
+
+      - name: Build
+        if: steps.read-build-cache.outputs.cache-hit != 'true'
+        run: yarn build
+
+test:
+  name: Test
+  runs-on: ubuntu-latest
+  needs: [build]
+  strategy:
+    matrix:
+      node-version: [10.x, 12.x, 14.x]
+      redis-version: [4, 5, 6]
+  env:
+    REDIS_URL: redis://:testpassword@localhost:6380
+    REDIS_HOST: localhost
+    REDIS_PORT: 6379
+    REDIS_PASS: testpassword
+  steps:
+    # Checkout source files
+    - name: Checkout Source Files
+      uses: actions/checkout@v2
+
+    # Setup environment
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+
+    - name: Setup Redis for tests
+      uses: getong/redis-action@v1
+      with:
+        redis version: ${{ matrix.redis-version }}
+        host port: ${{ env.REDIS_PORT }}
+        container port: ${{ env.REDIS_PORT }}
+        redis password: ${{ env.REDIS_PASS }}
+
+    # Read caches
+    - name: Read Yarn/Node Cache
+      uses: actions/cache@v2
+      id: read-yarn-cache
+      with:
+        key: ${{ runner.os }}-yarn-${{ hashFiles('./yarn.lock') }}
+        path: |
+          ${{ needs.build.outputs.yarn-cache-dir }}
+          **/node_modules
+
+    - name: Read Build Cache
+      id: read-build-cache
+      uses: actions/cache@v2
+      with:
+        key: ${{ runner.os }}-build-${{ github.sha }}
+        path: |
+          **/dist
+
+    - name: Test
+      run: |
+        yarn link
+        yarn test
