@@ -4,7 +4,7 @@ import sourceMaps from 'rollup-plugin-sourcemaps'
 import camelCase from 'lodash.camelcase'
 import typescript from 'rollup-plugin-typescript2'
 import json from 'rollup-plugin-json'
-
+import nodePolyfills from 'rollup-plugin-polyfill-node'
 import pkg from './package.json'
 
 const libraryName = 'ioredis-pool'
@@ -36,7 +36,6 @@ export default {
     // which external modules to include in the bundle
     // https://github.com/rollup/rollup-plugin-node-resolve#usage
     resolve(),
-
     // Resolve source maps to the original source
     sourceMaps(),
   ],

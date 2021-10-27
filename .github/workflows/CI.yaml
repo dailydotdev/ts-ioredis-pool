@@ -36,7 +36,7 @@ jobs:
         with:
           key: ${{ runner.os }}-yarn-${{ hashFiles('./yarn.lock') }}
           path: |
-            ${{ steps.set-outputs.outputs.yarn-cache-dir }}
+            ${{ steps.set-outputs.outputs.yarn_cache_dir }}
             **/node_modules
 
       - name: Read Build Cache
