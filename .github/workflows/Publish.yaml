@@ -17,6 +17,11 @@ jobs:
         with:
           node-version: 14
           registry-url: 'https://registry.npmjs.org'
+          always-auth: true
+
+      - name: Setup Environment
+        run: |
+          npm set //registry.npmjs.org/:_authToken=${{ secrets.NPM_TOKEN }}
 
       - name: Install Dependencies
         run: yarn install --frozen-lockfile
