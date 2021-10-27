@@ -85,6 +85,6 @@ await ioRedisPool.execute(async (client) => {
   const del = client.del('some-other-key')
 
   await Promise.all([set, del])
-  return await client.del('another-key')
+  return await client.read('another-key')
 })
 ```
