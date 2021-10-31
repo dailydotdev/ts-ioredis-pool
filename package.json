@@ -5,7 +5,7 @@
     "url": "https://stephenmp.github.io/"
   },
   "description": "An ioredis connection pooling client written in TypeScript",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "dist/index.js",
   "module": "dist/index.es5.js",
   "typings": "dist/types/index.d.ts",

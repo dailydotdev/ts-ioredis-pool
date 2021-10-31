@@ -56,7 +56,7 @@ export class IORedisPool extends EventEmitter {
     const factory: Factory<IRedis> = {
       create: (): Promise<IRedis> => {
         const context = this
-        return new Promise(function createRedis(resolve, reject) {
+        return new Promise((resolve, reject) => {
           let client: IRedis
           if (context.opts.url) {
             client = new Redis(context.opts.url, context.opts.redisOptions)
@@ -83,7 +83,7 @@ export class IORedisPool extends EventEmitter {
       },
       destroy: (client: IRedis): Promise<void> => {
         const context = this
-        return new Promise(function createRedis(resolve) {
+        return new Promise((resolve) => {
           client
             .on('close', (e: Error) => {
               context.emit('close', e, client)
@@ -95,6 +95,20 @@ export class IORedisPool extends EventEmitter {
             .disconnect()
         })
       },
+      validate: (client: IRedis): Promise<boolean> => {
+        return new Promise((resolve) => {
+          if (
+            client.status === "connecting" ||
+            client.status === "connect" ||
+            client.status === "ready"
+          ) {
+            resolve(true)
+          }
+          else {
+            resolve(false)
+          }
+        })
+      }
     }
 
     return createPool(factory, this.opts.poolOptions)

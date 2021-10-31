@@ -40,7 +40,7 @@ const testSet = (client: IRedis | undefined, pool: IORedisPool | undefined) => {
       pool.execute(async () => {
         client?.del('test-execute')
       })
-      await expect(client.get('test')).resolves.toBeNull()
+      await expect(client.get('test-execute')).resolves.toBeNull()
     }
   })
 
