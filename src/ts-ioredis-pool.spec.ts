@@ -2,11 +2,14 @@ import { IORedisPool } from './index'
 import { IORedisPoolOptions } from './ts-ioredis-pool'
 import { Redis as IRedis } from 'ioredis'
 
+let pool: IORedisPool | undefined
+let client: IRedis | undefined
+
 global.fail = (error?: any): never => {
   throw new Error(error)
 }
 
-const testSet = (client: IRedis | undefined, pool: IORedisPool | undefined) => {
+const testSet = () => {
   beforeEach(async () => {
     client = await pool?.getConnection()
   })
@@ -15,6 +18,8 @@ const testSet = (client: IRedis | undefined, pool: IORedisPool | undefined) => {
     if (client) {
       client.set('test', 'test redis')
       await expect(client.get('test')).resolves.toBe('test redis')
+    } else {
+      fail('No client')
     }
   })
 
@@ -22,12 +27,14 @@ const testSet = (client: IRedis | undefined, pool: IORedisPool | undefined) => {
     if (client) {
       client?.del('test')
       await expect(client.get('test')).resolves.toBeNull()
+    } else {
+      fail('No client')
     }
   })
 
   it('Can execute', async () => {
     if (pool && client) {
-      pool.execute(async () => {
+      await pool.execute(async () => {
         client?.set('test-execute', 'value')
       })
       await expect(client.get('test-execute')).resolves.toBe('value')
@@ -37,10 +44,12 @@ const testSet = (client: IRedis | undefined, pool: IORedisPool | undefined) => {
       })
       expect(testVal).toBe('value')
 
-      pool.execute(async () => {
+      await pool.execute(async () => {
         client?.del('test-execute')
       })
       await expect(client.get('test-execute')).resolves.toBeNull()
+    } else {
+      fail('No pool or client')
     }
   })
 
@@ -49,6 +58,8 @@ const testSet = (client: IRedis | undefined, pool: IORedisPool | undefined) => {
       await pool?.disconnect(client)
       await expect(pool?.release(client)).rejects.toThrow('Resource not currently part of this pool')
       client = undefined
+    } else {
+      fail('No client')
     }
   })
 
@@ -63,9 +74,6 @@ describe('test ts-ioredis-pool from host and port', () => {
   if (!process.env.REDIS_HOST || !process.env.REDIS_PORT) {
     fail('REDIS_HOST or REDIS_PORT env var is not set!')
   } else {
-    let pool: IORedisPool | undefined
-    let client: IRedis | undefined
-
     beforeAll(() => {
       const port = parseInt(process.env.REDIS_PORT as string)
       const opts = IORedisPoolOptions.fromHostAndPort(process.env.REDIS_HOST as string, port)
@@ -88,7 +96,7 @@ describe('test ts-ioredis-pool from host and port', () => {
       pool = new IORedisPool(opts)
     })
 
-    testSet(client, pool)
+    testSet()
 
     afterAll(() => {
       return pool?.end()
@@ -100,9 +108,6 @@ describe('test ts-ioredis-pool from url', () => {
   if (!process.env.REDIS_URL) {
     fail('REDIS_URL env var is not set!')
   } else {
-    let pool: IORedisPool | undefined
-    let client: IRedis | undefined
-
     beforeAll(() => {
       const opts = IORedisPoolOptions.fromUrl(process.env.REDIS_URL as string)
         .withIORedisOptions({
@@ -123,7 +128,7 @@ describe('test ts-ioredis-pool from url', () => {
       pool = new IORedisPool(opts)
     })
 
-    testSet(client, pool)
+    testSet()
 
     afterAll(() => {
       return pool?.end()
