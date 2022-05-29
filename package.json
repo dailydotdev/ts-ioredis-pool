@@ -1,5 +1,5 @@
 {
-  "name": "ts-ioredis-pool",
+  "name": "@dailydotdev/ts-ioredis-pool",
   "author": {
     "name": "StephenMP",
     "url": "https://stephenmp.github.io/"
@@ -46,7 +46,7 @@
   "devDependencies": {
     "@types/events": "^3.0.0",
     "@types/generic-pool": "^3.1.10",
-    "@types/ioredis": "^4.27.8",
+    "@types/ioredis": "^4.28.10",
     "@types/jest": "^27.0.2",
     "@vercel/ncc": "^0.31.1",
     "dotenv": "^10.0.0",
@@ -57,6 +57,6 @@
   "dependencies": {
     "events": "^3.3.0",
     "generic-pool": "^3.8.2",
-    "ioredis": "^4.28.0"
+    "ioredis": "^5.0.5"
   }
 }

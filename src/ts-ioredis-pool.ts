@@ -8,23 +8,19 @@ export class IORedisConnectionOptions {
 
 export class IORedisPoolOptions {
   url?: string
-  host: string | undefined = '127.0.0.1'
-  port: number | undefined = 6379
+  host: string = '127.0.0.1'
+  port: number = 6379
   redisOptions: RedisOptions = {}
   poolOptions: Options = {}
 
   public static fromUrl(url: string): IORedisPoolOptions {
     const instance = new IORedisPoolOptions()
     instance.url = url
-    instance.host = undefined
-    instance.port = undefined
-
     return instance
   }
 
   public static fromHostAndPort(host: string, port: number): IORedisPoolOptions {
     const instance = new IORedisPoolOptions()
-    instance.url = undefined
     instance.host = host
     instance.port = port
 
